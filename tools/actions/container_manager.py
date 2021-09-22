@@ -231,7 +231,7 @@ def restart(args):
 def freeze(args):
     status = helpers.lxc.status(args)
     if status == "RUNNING":
-        helpers.lxc.freeze(args)
+        #helpers.lxc.freeze(args)
         if os.path.exists(tools.config.session_defaults["config_path"]):
             session_cfg = tools.config.load_session()
             session_cfg["session"]["state"] = helpers.lxc.status(args)
