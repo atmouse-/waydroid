@@ -1,0 +1,13 @@
+[Match]
+Name=waydroid0
+
+[Network]
+Address=192.168.250.1/24
+DHCPServer=true
+IPForward=yes
+
+[DHCPServer]
+PoolOffset=100
+PoolSize=20
+EmitDNS=yes
+#DNS=8.8.8.8

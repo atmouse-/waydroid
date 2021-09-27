@@ -186,13 +186,7 @@ start() {
         mkdir "${varlib}"/misc
     fi
 
-    dnsmasq $LXC_DHCP_CONFILE_ARG $LXC_DOMAIN_ARG $LXC_DHCP_PING_ARG -u ${DNSMASQ_USER} \
-            --strict-order --bind-interfaces --pid-file="${varrun}"/dnsmasq.pid \
-            --listen-address ${LXC_ADDR} --dhcp-range ${LXC_DHCP_RANGE} \
-            --dhcp-lease-max=${LXC_DHCP_MAX} --dhcp-no-override \
-            --except-interface=lo --interface=${LXC_BRIDGE} \
-            --dhcp-leasefile="${varlib}"/misc/dnsmasq.${LXC_BRIDGE}.leases \
-            --dhcp-authoritative $LXC_IPV6_ARG || cleanup
+    true || cleanup
 
     touch "${varrun}"/network_up
     FAILED=0
