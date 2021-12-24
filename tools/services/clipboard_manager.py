@@ -5,7 +5,7 @@ import threading
 from tools.interfaces import IClipboard
 
 try:
-    import pyclip
+    import pyperclip as pyclip
     canClip = True
 except Exception as e:
     logging.debug(str(e))
