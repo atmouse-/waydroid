@@ -4,6 +4,7 @@ import logging
 import configparser
 import os
 import tools.config
+from multiprocessing import shared_memory
 
 
 def load(args):
@@ -51,6 +52,13 @@ def load_session():
             del cfg["session"][key]
 
     return cfg
+
+def load_state():
+    session_name = tools.config.session_name
+    shm_state = shared_memory.SharedMemory(name=session_name, create=False)
+    state = shm_state.buf[0]
+    shm_state.close()
+    return state
 
 def load_channels():
     config_path = tools.config.channels_defaults["config_path"]

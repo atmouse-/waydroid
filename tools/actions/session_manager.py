@@ -33,20 +33,20 @@ def start(args, unlocked_cb=None):
     cfg["session"]["lcd_density"] = dpi
     tools.config.save_session(cfg)
 
-    container_state = "IDLE"
+    container_state = tools.config.stats["IDLE"]
     signal.signal(signal.SIGINT, signal_handler)
     while os.path.exists(tools.config.session_defaults["config_path"]):
-        session_cfg = tools.config.load_session()
-        if container_state != session_cfg["session"]["state"]:
-            if session_cfg["session"]["state"] == "RUNNING":
+        state = tools.config.load_state()
+        if container_state != state:
+            if state == tools.config.stats["RUNNING"]:
                 services.user_manager.start(args, unlocked_cb)
                 services.clipboard_manager.start(args)
                 if unlocked_cb:
                     unlocked_cb = None
-            elif session_cfg["session"]["state"] == "STOPPED":
+            elif state == tools.config.stats["STOPPED"]:
                 services.user_manager.stop(args)
                 services.clipboard_manager.stop(args)
-            container_state = session_cfg["session"]["state"]
+            container_state = state
         time.sleep(1)
     services.user_manager.stop(args)
     services.clipboard_manager.stop(args)

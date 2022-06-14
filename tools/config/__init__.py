@@ -6,8 +6,9 @@ import pwd
 #
 # Exported functions
 #
-from tools.config.load import load, load_session, load_channels
-from tools.config.save import save, save_session
+from tools.config.load import load, load_session, load_state, load_channels
+from tools.config.save import save, save_session, save_state
+from tools.config.save import init_state, destroy_state
 
 #
 # Exported variables (internal configuration)
@@ -69,6 +70,8 @@ session_defaults["waydroid_data"] = session_defaults["xdg_data_home"] + \
 if session_defaults["pulse_runtime_path"] == "None":
     session_defaults["pulse_runtime_path"] = session_defaults["xdg_runtime_dir"] + "/pulse"
 
+session_name = "waydroid_session0"
+
 channels_defaults = {
     "config_path": "/usr/share/waydroid-extra/channels.cfg",
     "system_channel": "https://ota.waydro.id/system",
@@ -80,3 +83,10 @@ channels_config_keys = ["system_channel",
                         "vendor_channel",
                         "rom_type",
                         "system_type"]
+stats = {
+    "STOPPED": 0,
+    "RUNNING": 1,
+    "IDLE": 2,
+    "FROZEN": 4,
+    "UNFREEZE": 5
+}

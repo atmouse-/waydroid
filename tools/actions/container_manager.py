@@ -108,6 +108,8 @@ def start(args):
                 logging.warning("Found session config on state: {}, restart session".format(
                     session_cfg["session"]["state"]))
                 os.remove(tools.config.session_defaults["config_path"])
+
+        tools.config.init_state(tools.config.stats[status])
         logging.debug("Container manager is waiting for session to load")
         while not os.path.exists(tools.config.session_defaults["config_path"]):
             time.sleep(1)
@@ -167,17 +169,18 @@ def start(args):
 
         signal.signal(signal.SIGINT, signal_handler)
         while os.path.exists(tools.config.session_defaults["config_path"]):
-            session_cfg = tools.config.load_session()
-            if session_cfg["session"]["state"] == "STOPPED":
+            state = tools.config.load_state()
+            if state == tools.config.stats["STOPPED"]:
                 services.hardware_manager.stop(args)
                 sys.exit(0)
-            elif session_cfg["session"]["state"] == "UNFREEZE":
+            elif state == tools.config.stats["UNFREEZE"]:
                 session_cfg["session"]["state"] = helpers.lxc.status(args)
                 tools.config.save_session(session_cfg)
                 unfreeze(args)
             time.sleep(1)
 
         logging.warning("session manager stopped, stopping container and waiting...")
+        tools.config.destroy_state()
         stop(args)
         services.hardware_manager.stop(args)
         start(args)
